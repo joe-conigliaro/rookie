@@ -54,8 +54,8 @@ pub fn find_chrome_based_paths(config: &Browser) -> Result<Vec<(PathBuf, PathBuf
 
 pub fn find_chrome_based_path(config: &Browser) -> Result<(PathBuf, PathBuf)> {
   let paths = find_chrome_based_paths(&config)?;
-  let (key_path, db_path) = &paths[0];
-  Ok((key_path.clone(), db_path.clone()))
+  // SAFETY: paths is guaranteed non-empty, unwrap() is safe.
+  Ok(paths.into_iter().next().unwrap())
 }
 
 pub fn find_mozilla_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
@@ -89,7 +89,8 @@ pub fn find_mozilla_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
 
 pub fn find_mozilla_based_path(config: &Browser) -> Result<PathBuf> {
   let paths = find_mozilla_based_paths(config)?;
-  Ok(paths[0].clone())
+  // SAFETY: paths is guaranteed non-empty, unwrap() is safe.
+  Ok(paths.into_iter().next().unwrap())
 }
 
 #[cfg(target_os = "macos")]
@@ -121,7 +122,8 @@ pub fn find_safari_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
 #[cfg(target_os = "macos")]
 pub fn find_safari_based_path(config: &Browser) -> Result<PathBuf> {
   let paths = find_safari_based_paths(config)?;
-  Ok(paths[0].clone())
+  // SAFETY: paths is guaranteed non-empty, unwrap() is safe.
+  Ok(paths.into_iter().next().unwrap())
 }
 
 #[cfg(target_os = "windows")]
@@ -152,7 +154,8 @@ pub fn find_ie_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
 #[cfg(target_os = "windows")]
 pub fn find_ie_based_path(config: &Browser) -> Result<PathBuf> {
   let paths = find_ie_based_paths(config)?;
-  Ok(paths[0].clone())
+  // SAFETY: paths is guaranteed non-empty, unwrap() is safe.
+  Ok(paths.into_iter().next().unwrap())
 }
 #[cfg(target_os = "windows")]
 pub fn expand_path(path: &str) -> Result<PathBuf> {
