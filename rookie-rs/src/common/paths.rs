@@ -61,12 +61,15 @@ pub fn find_chrome_based_path(config: &Browser) -> Result<(PathBuf, PathBuf)> {
 pub fn find_mozilla_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
   let mut results = Vec::new();
   for path in &config.paths {
+    // base paths
     let channels = config.channels.clone().unwrap_or(vec!["".to_string()]);
     for channel in channels {
+      // channels
       let path = path.replace("{channel}", &channel);
       let firefox_path = expand_path(path.as_str())?;
       let glob_paths = expand_glob_paths(firefox_path)?;
       for path in glob_paths {
+        // expanded glob paths
         let profiles_path = path.join("profiles.ini");
         let default_profile =
           get_default_profile(profiles_path.as_path()).unwrap_or("".to_string());
@@ -125,12 +128,15 @@ pub fn find_safari_based_path(config: &Browser) -> Result<PathBuf> {
 pub fn find_ie_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
   let mut results = Vec::new();
   for path in &config.paths {
+    // base paths
     let channels = config.channels.clone().unwrap_or(vec!["".to_string()]);
     for channel in channels {
+      // channels
       let path = path.replace("{channel}", &channel);
       let expanded_path = expand_path(path.as_str())?;
       let glob_paths = expand_glob_paths(expanded_path)?;
       for path in glob_paths {
+        // expanded glob paths
         if path.exists() {
           log::debug!("Found IE path {}", path.display());
           results.push(path);
@@ -139,7 +145,7 @@ pub fn find_ie_based_paths(config: &Browser) -> Result<Vec<PathBuf>> {
     }
   }
   if results.is_empty() {
-    bail!("Can't find IE cookies file");
+    bail!("Can't find cookies file");
   }
   Ok(results)
 }
